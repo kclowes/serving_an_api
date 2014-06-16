@@ -54,5 +54,29 @@ describe "Cars API" do
       expect(response.code.to_i).to eq 200
       expect(JSON.parse(response.body)).to eq(expected_response)
     end
+
+    it 'will return an API with a request to the cars/:id' do
+      make1 = create_make
+      red_car = create_car(color: "red", doors: "4", purchased_on: "1973-10-04", make_id: make1.id)
+
+      get "/cars/#{red_car.id}", {}, {'Accept' => 'application/json'}
+      expected_response = {
+        "_links" => {
+          "self" => {
+            "href" => "/cars/#{red_car.id}"
+          },
+          "make" => {
+            "href" => "/makes/#{red_car.make_id}"
+          }
+        },
+        "id" => red_car.id,
+        "color" => red_car.color,
+        "doors" => red_car.doors,
+        "purchased_on" => "1973-10-04"
+      }
+
+      expect(response.code.to_i).to eq 200
+      expect(JSON.parse(response.body)).to eq(expected_response)
+    end
   end
 end
