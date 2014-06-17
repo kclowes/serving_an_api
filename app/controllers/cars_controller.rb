@@ -4,6 +4,10 @@ class CarsController < ActionController::Base
   end
 
   def show
-    @car = Car.find(params[:id])
+    begin
+      @car = Car.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render :status => 404, json: {}
+    end
   end
 end

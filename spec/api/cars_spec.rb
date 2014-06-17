@@ -55,7 +55,7 @@ describe "Cars API" do
       expect(JSON.parse(response.body)).to eq(expected_response)
     end
 
-    it 'will return an API with a request to the cars/:id' do
+    it 'will return a car if it exists' do
       make1 = create_make
       red_car = create_car(color: "red", doors: "4", purchased_on: "1973-10-04", make_id: make1.id)
 
@@ -78,5 +78,14 @@ describe "Cars API" do
       expect(response.code.to_i).to eq 200
       expect(JSON.parse(response.body)).to eq(expected_response)
     end
+
+    it 'will return a 404 if the car does not exist' do
+      get "/cars/89034", {}, {'Accept' => 'application/json'}
+      expected_response = {}
+      expect(response.code.to_i).to eq 404
+      expect(JSON.parse(response.body)).to eq(expected_response)
+    end
   end
 end
+
+
